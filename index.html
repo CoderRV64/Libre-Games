@@ -2,53 +2,143 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="manifest.json">
     <title>Libre Games</title>
     <style>
-        body { margin: 0; background: #0b0e14; color: white; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }
-        header { padding: 40px; border-left: 5px solid #00f2ff; margin: 20px; }
-        .slider { display: flex; overflow-x: auto; gap: 20px; padding: 20px; scroll-snap-type: x mandatory; flex-grow: 1; align-items: center; }
-        .card { min-width: 200px; background: #1a1f29; padding: 40px; border-radius: 10px; scroll-snap-align: center; text-align: center; }
-        button { background: #00f2ff; border: none; padding: 15px 30px; border-radius: 5px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        :root { --bg: #0b0e14; --card: #1a1f29; --accent: #00f2ff; }
+        body { 
+            margin: 0; background: var(--bg); color: white; 
+            font-family: 'Segoe UI', system-ui, sans-serif; height: 100vh;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        header { 
+            padding: 30px 40px; display: flex; justify-content: space-between; 
+            align-items: center; border-bottom: 1px solid #1a1f29; 
+        }
+        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 4px; border-left: 5px solid var(--accent); padding-left: 15px; font-size: 1.8rem; }
+
+        #btn-instalar { 
+            display: none; background: #22c55e; border: none; padding: 10px 20px; 
+            border-radius: 6px; font-weight: bold; cursor: pointer; color: white; text-transform: uppercase;
+        }
+        #btn-instalar:hover { background: #16a34a; }
+
+        /* Contenedor del Slider tipo Consola */
+        .slider-container { 
+            flex-grow: 1; display: flex; align-items: center; 
+            overflow-x: auto; padding: 0 50px; gap: 30px;
+            scroll-snap-type: x mandatory; scroll-behavior: smooth;
+        }
+
+        /* Tarjeta de juego */
+        .game-card { 
+            min-width: 260px; height: 320px; background: var(--card);
+            border-radius: 12px; display: flex; flex-direction: column;
+            justify-content: space-between; padding: 30px;
+            scroll-snap-align: center; border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover { 
+            border-color: var(--accent); transform: scale(1.03);
+            box-shadow: 0 0 25px rgba(0, 242, 255, 0.15);
+        }
+
+        .game-card h2 { margin: 0; font-size: 1.4rem; text-align: center; margin-top: 40px; }
+
+        .action-btn { 
+            background: var(--accent); border: none; padding: 14px; 
+            border-radius: 6px; font-weight: bold; cursor: pointer;
+            text-transform: uppercase; color: var(--bg); transition: background 0.2s;
+            width: 100%;
+        }
+
+        .action-btn:hover { background: #fff; }
+
+        @media (max-width: 600px) {
+            header { padding: 20px; flex-direction: column; gap: 15px; align-items: flex-start; }
+            .slider-container { padding: 0 20px; gap: 20px; }
+            .game-card { min-width: 220px; height: 280px; padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
-<header><h1>LIBRE GAMES</h1></header>
-<div class="slider" id="slider"></div>
+    <header>
+        <h1>Libre Games</h1>
+        <button id="btn-instalar">Instalar Consola</button>
+    </header>
 
-<script>
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+    <div class="slider-container" id="game-slider"></div>
 
-    async function cargarJuegos() {
-        const res = await fetch('games.json');
-        const juegos = await res.json();
-        const slider = document.getElementById('slider');
-
-        for (const j of juegos) {
-            const card = document.createElement('div');
-            card.className = 'card';
-            const instalado = await caches.has(j.id); // Verificamos si existe caché con el id del juego
-            
-            card.innerHTML = `<h2>${j.titulo}</h2>
-            <button onclick="gestionarJuego('${j.id}', '${j.ruta}', this)">
-                ${instalado ? 'JUGAR' : 'DESCARGAR'}
-            </button>`;
-            slider.appendChild(card);
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
         }
-    }
 
-    async function gestionarJuego(id, ruta, btn) {
-        if (btn.innerText === 'DESCARGAR') {
-            const cache = await caches.open(id);
-            await cache.add(ruta); // Descarga el archivo del juego
-            btn.innerText = 'JUGAR';
-        } else {
-            window.location.href = ruta;
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const btnInstalar = document.getElementById('btn-instalar');
+            btnInstalar.style.display = 'block';
+            btnInstalar.addEventListener('click', async () => {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    btnInstalar.style.display = 'none';
+                }
+                deferredPrompt = null;
+            });
+        });
+
+        async function cargarTienda() {
+            try {
+                const resp = await fetch('games.json');
+                const juegos = await resp.json();
+                const slider = document.getElementById('game-slider');
+
+                for (const juego of juegos) {
+                    const card = document.createElement('div');
+                    card.className = 'game-card';
+                    
+                    const cacheName = 'juego-' + juego.id;
+                    const cacheExists = await caches.has(cacheName);
+
+                    card.innerHTML = `
+                        <h2>${juego.titulo}</h2>
+                        <button class="action-btn" onclick="gestionarJuego('${juego.id}', '${juego.ruta}', this)">
+                            ${cacheExists ? 'JUGAR' : 'DESCARGAR'}
+                        </button>
+                    `;
+                    slider.appendChild(card);
+                }
+            } catch (error) {
+                console.error("Error al cargar la tienda:", error);
+            }
         }
-    }
 
-    cargarJuegos();
-</script>
+        async function gestionarJuego(id, ruta, btn) {
+            const cacheName = 'juego-' + id;
+            if (btn.innerText === 'DESCARGAR') {
+                try {
+                    btn.innerText = 'DESCARGANDO...';
+                    const cache = await caches.open(cacheName);
+                    await cache.add(ruta);
+                    btn.innerText = 'JUGAR';
+                } catch (error) {
+                    console.error("Error en la descarga:", error);
+                    btn.innerText = 'DESCARGAR';
+                    alert('No se pudo descargar el juego. Verifica tu conexión.');
+                }
+            } else {
+                window.location.href = ruta;
+            }
+        }
+
+        cargarTienda();
+    </script>
 </body>
 </html>

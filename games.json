@@ -4,4 +4,10 @@
     "titulo": "Shoot Target",
     "ruta": "games/shoot-target/index.html"
   }
+  
+  {
+    "id": "neondrop",
+    "titulo": "Neon Drop",
+    "ruta": "games/neondrop/index.html"
+  }
 ]

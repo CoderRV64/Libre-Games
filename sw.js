@@ -1,4 +1,4 @@
-const CACHE_NAME = 'libre-games-v3';
+const CACHE_NAME = 'libre-games-v4';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -6,7 +6,6 @@ const ASSETS_TO_CACHE = [
     './manifest.json'
 ];
 
-// Instala el Service Worker y guarda los archivos principales de la tienda
 self.addEventListener('install', (e) => {
     e.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
@@ -16,7 +15,6 @@ self.addEventListener('install', (e) => {
     self.skipWaiting();
 });
 
-// Limpia cachés antiguas si actualizas la versión
 self.addEventListener('activate', (e) => {
     e.waitUntil(
         caches.keys().then((keys) => {
@@ -32,7 +30,6 @@ self.addEventListener('activate', (e) => {
     self.claim();
 });
 
-// Intercepta las peticiones para servirlas desde la caché si no hay red
 self.addEventListener('fetch', (e) => {
     e.respondWith(
         caches.match(e.request).then((cachedResponse) => {
@@ -40,7 +37,6 @@ self.addEventListener('fetch', (e) => {
                 return cachedResponse;
             }
             return fetch(e.request).catch(() => {
-                // Si falla la red y no está en caché general, busca en cachés de juegos individuales
                 return caches.match(e.request);
             });
         })

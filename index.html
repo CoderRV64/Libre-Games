@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="manifest.json">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <title>Libre Games</title>
     <style>
         :root { --bg: #0b0e14; --card: #1a1f29; --accent: #22c55e; }
@@ -25,14 +26,12 @@
         }
         #btn-instalar:hover { background: #16a34a; color: white; }
 
-        /* Contenedor del Slider tipo Consola */
         .slider-container { 
             flex-grow: 1; display: flex; align-items: center; 
             overflow-x: auto; padding: 0 50px; gap: 30px;
             scroll-snap-type: x mandatory; scroll-behavior: smooth;
         }
 
-        /* Tarjeta de juego */
         .game-card { 
             min-width: 260px; height: 320px; background: var(--card);
             border-radius: 12px; display: flex; flex-direction: column;
@@ -96,9 +95,24 @@
 
         async function cargarTienda() {
             try {
-                // Evitamos que el JSON se quede atrapado en la caché del navegador
-                const resp = await fetch('games.json?v=' + new Date().getTime());
-                const juegos = await resp.json();
+                let textoYaml = "";
+                try {
+                    // Intenta descargar la versión más fresca desde la red
+                    const respuesta = await fetch('games.yaml?v=' + new Date().getTime());
+                    if (!respuesta.ok) throw new Error("Red no disponible");
+                    textoYaml = await respuesta.text();
+                } catch (netError) {
+                    // Si no hay red, busca el YAML directamente en la caché del navegador para no dejar la pantalla vacía
+                    const cacheMatch = await caches.match('games.yaml');
+                    if (cacheMatch) {
+                        textoYaml = await cacheMatch.text();
+                    } else {
+                        throw new Error("No hay datos en caché para los juegos.");
+                    }
+                }
+
+                // Convierte el texto YAML a un objeto de JavaScript usando la librería cargada
+                const juegos = jsyaml.load(textoYaml);
                 const slider = document.getElementById('game-slider');
                 slider.innerHTML = '';
 
@@ -118,7 +132,7 @@
                     slider.appendChild(card);
                 }
             } catch (error) {
-                console.error("Error al cargar la tienda:", error);
+                console.error("Error al cargar la tienda offline:", error);
             }
         }
 
@@ -133,7 +147,7 @@
                 } catch (error) {
                     console.error("Error en la descarga:", error);
                     btn.innerText = 'DESCARGAR';
-                    alert('No se pudo descargar el juego. Verifica tu conexión.');
+                    alert('No se pudo descargar. Comprueba tu conexión a internet.');
                 }
             } else {
                 window.location.href = ruta;

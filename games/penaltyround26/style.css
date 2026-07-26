@@ -1,0 +1,99 @@
+body {
+  margin: 0;
+  background: #222;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  user-select: none;
+}
+.oculto { display: none !important; }
+.grid-paises {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px;
+}
+.btn-pais {
+  font-size: 2rem;
+  padding: 10px;
+  border: 2px solid transparent;
+  background: #333;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.btn-pais.seleccionado { border-color: #00ff00; background: #444; }
+#btn-jugar {
+  padding: 15px 40px;
+  font-size: 1.5rem;
+  background: #00ff00;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+#btn-jugar:disabled { background: #555; cursor: not-allowed; }
+
+/* CAMPO DE JUEGO */
+#pantalla-juego { position: relative; margin-top: 20px; }
+#marcador {
+  display: flex;
+  justify-content: space-around;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+#campo {
+  width: 400px;
+  height: 400px;
+  background: #2e7d32;
+  margin: 0 auto;
+  position: relative;
+  border: 4px solid white;
+  overflow: hidden;
+}
+#porteria {
+  width: 250px;
+  height: 90px;
+  border: 5px solid white;
+  border-top: none;
+  position: absolute;
+  top: 0;
+  left: 70px;
+  background: rgba(255,255,255,0.1);
+}
+#portero {
+  font-size: 2.5rem;
+  position: absolute;
+  top: 55px;
+  left: 180px;
+  transition: left 0.02s linear; /* Suaviza el movimiento en JS */
+}
+#balon {
+  font-size: 2rem;
+  position: absolute;
+  bottom: 30px;
+  left: 185px;
+  cursor: pointer;
+}
+
+/* ANIMACIÓN TEXTO DE GOL */
+#cartel-gol {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffeb3b;
+  text-shadow: 2px 2px #000;
+  background: rgba(0,0,0,0.8);
+  padding: 20px;
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 10;
+}
+.animar-gol { animation: popGol 1.5s ease-out forwards; }
+@keyframes popGol {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  80% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+}

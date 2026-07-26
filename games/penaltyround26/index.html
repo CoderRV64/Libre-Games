@@ -1,397 +1,42 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Neon Drop</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: none;
-        }
-        body {
-            background-color: #0d0e15;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            color: #fff;
-        }
-        .game-container {
-            position: relative;
-            width: 400px;
-            height: 600px;
-            background: #131520;
-            border: 2px solid #2a2e43;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        canvas {
-            display: block;
-            background: #131520;
-        }
-        .ui-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 18px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
-        }
-        .screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(13, 14, 21, 0.85);
-            backdrop-filter: blur(5px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            text-align: center;
-            padding: 20px;
-        }
-        h1 {
-            font-size: 38px;
-            margin-bottom: 10px;
-            color: #00f0ff;
-            text-shadow: 0 0 20px rgba(0,240,255,0.5);
-        }
-        p {
-            color: #8b9bb4;
-            margin-bottom: 25px;
-            font-size: 15px;
-            line-height: 1.4;
-        }
-        .btn {
-            pointer-events: auto;
-            background: linear-gradient(135deg, #00f0ff, #7000ff);
-            border: none;
-            color: white;
-            padding: 12px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: transform 0.1s, box-shadow 0.1s;
-            box-shadow: 0 0 15px rgba(0,240,255,0.4);
-        }
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(0,240,255,0.7);
-        }
-        .btn:active {
-            transform: scale(0.95);
-        }
-        .hidden {
-            display: none !important;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Penalty Round 26</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="game-container">
-    <canvas id="gameCanvas" width="400" height="600"></canvas>
-    
-    <div class="ui-layer">
-        <div class="header">
-            <div>
-                <span id="scoreDisplay">PUNTOS: 0</span><br>
-                <span id="highScoreDisplay" style="font-size: 12px; color: #f0a500;">MÁX: 0</span>
-            </div>
-            <span id="livesDisplay">❤️ 3</span>
-        </div>
+  <!-- PANTALLA DE SELECCIÓN -->
+  <div id="pantalla-seleccion">
+    <h1>Penalty Round 26</h1>
+    <p>Elige tu país:</p>
+    <div id="lista-tu-pais" class="grid-paises"></div>
+    <p>Elige tu rival:</p>
+    <div id="lista-rival" class="grid-paises"></div>
+    <button id="btn-jugar" disabled>¡JUGAR!</button>
+  </div>
+
+  <!-- PANTALLA DE JUEGO -->
+  <div id="pantalla-juego" class="oculto">
+    <!-- Marcador -->
+    <div id="marcador">
+      <div id="txt-score">Score 🇪🇸: 0</div>
+      <div id="txt-detenidos">Detenidos 🇫🇷: 0</div>
+      <div id="txt-highscore">Récord: 0</div>
     </div>
 
-    <!-- Pantalla de Inicio -->
-    <div id="startScreen" class="screen">
-        <h1>NEON DROP</h1>
-        <p>Atrapa las esferas azules y esquiva las rojas.<br>¡Mucho más accesible y divertido!</p>
-        <button class="btn" id="startBtn">JUGAR</button>
+    <!-- Campo de fútbol CSS -->
+    <div id="campo">
+      <div id="porteria"></div>
+      <div id="portero">👨‍🦱</div>
+      <div id="balon">⚽</div>
     </div>
 
-    <!-- Pantalla de Game Over -->
-    <div id="gameOverScreen" class="screen hidden">
-        <h1>¡FIN DEL JUEGO!</h1>
-        <p id="finalScoreText">Puntuación final: 0</p>
-        <p id="newRecord" style="color: #00ffcc; font-weight: bold; margin-top: -15px; margin-bottom: 25px;"></p>
-        <button class="btn" id="restartBtn">VOLVER A JUGAR</button>
-    </div>
-</div>
+    <!-- Texto de Gol Animado -->
+    <div id="cartel-gol" class="oculto-anim"></div>
+  </div>
 
-<script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-
-    const startScreen = document.getElementById('startScreen');
-    const gameOverScreen = document.getElementById('gameOverScreen');
-    const startBtn = document.getElementById('startBtn');
-    const restartBtn = document.getElementById('restartBtn');
-    const scoreDisplay = document.getElementById('scoreDisplay');
-    const highScoreDisplay = document.getElementById('highScoreDisplay');
-    const livesDisplay = document.getElementById('livesDisplay');
-    const finalScoreText = document.getElementById('finalScoreText');
-    const newRecordText = document.getElementById('newRecord');
-
-    let score = 0;
-    let highScore = parseInt(localStorage.getItem('neonDropHighScore')) || 0;
-    let lives = 3;
-    let spawnerInterval;
-    let isPlaying = false;
-
-    highScoreDisplay.innerText = `MÁX: ${highScore}`;
-
-    // Configuración del Jugador
-    const player = {
-        x: 160,
-        y: 540,
-        width: 90, // Ligeramente más ancho para facilitar la captura
-        height: 14,
-        speed: 9,
-        color: '#00f0ff'
-    };
-
-    let items = [];
-    let particles = [];
-
-    // Controles
-    let keys = { ArrowLeft: false, ArrowRight: false };
-
-    window.addEventListener('keydown', (e) => {
-        if (e.key in keys) keys[e.key] = true;
-    });
-    window.addEventListener('keyup', (e) => {
-        if (e.key in keys) keys[e.key] = false;
-    });
-
-    // Control de Ratón y Táctil mejorado y fluido
-    function handleMove(clientX) {
-        const rect = canvas.getBoundingClientRect();
-        const x = clientX - rect.left;
-        player.x = x - player.width / 2;
-    }
-
-    canvas.addEventListener('mousemove', (e) => {
-        if (isPlaying) handleMove(e.clientX);
-    });
-
-    canvas.addEventListener('touchstart', (e) => {
-        if (isPlaying && e.touches.length > 0) {
-            handleMove(e.touches[0].clientX);
-        }
-    }, { passive: true });
-
-    canvas.addEventListener('touchmove', (e) => {
-        if (isPlaying && e.touches.length > 0) {
-            handleMove(e.touches[0].clientX);
-        }
-    }, { passive: true });
-
-    // Soporte para Gamepad (Mando)
-    function handleGamepad() {
-        const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-        for (let gp of gamepads) {
-            if (!gp) continue;
-
-            const axisX = gp.axes[0];
-            if (Math.abs(axisX) > 0.15) {
-                player.x += axisX * player.speed * 1.3;
-            }
-
-            if (gp.buttons[14] && gp.buttons[14].pressed) player.x -= player.speed;
-            if (gp.buttons[15] && gp.buttons[15].pressed) player.x += player.speed;
-        }
-    }
-
-    function resetGame() {
-        score = 0;
-        lives = 3;
-        items = [];
-        particles = [];
-        player.x = 160;
-        updateUI();
-    }
-
-    function updateUI() {
-        scoreDisplay.innerText = `PUNTOS: ${score}`;
-        highScoreDisplay.innerText = `MÁX: ${highScore}`;
-        livesDisplay.innerText = '❤️ '.repeat(lives);
-    }
-
-    function spawnItem() {
-        const isBad = Math.random() < 0.22; // Menos probabilidad de bombas (22%)
-        items.push({
-            x: Math.random() * (canvas.width - 24),
-            y: -24,
-            radius: 12,
-            speed: 2.2 + Math.random() * 1.8 + (score * 0.02), // Velocidad inicial más baja y progresiva suave
-            color: isBad ? '#ff0055' : '#00ffcc',
-            isBad: isBad
-        });
-    }
-
-    function createParticles(x, y, color) {
-        for (let i = 0; i < 8; i++) {
-            particles.push({
-                x: x,
-                y: y,
-                dx: (Math.random() - 0.5) * 6,
-                dy: (Math.random() - 0.5) * 6,
-                radius: Math.random() * 3 + 1,
-                color: color,
-                life: 30
-            });
-        }
-    }
-
-    function update() {
-        if (!isPlaying) return;
-
-        handleGamepad();
-
-        if (keys.ArrowLeft) player.x -= player.speed;
-        if (keys.ArrowRight) player.x += player.speed;
-
-        // Límites de la pantalla
-        if (player.x < 0) player.x = 0;
-        if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
-
-        // Actualizar ítems
-        for (let i = items.length - 1; i >= 0; i--) {
-            let item = items[i];
-            item.y += item.speed;
-
-            // Colisión con la barra
-            if (
-                item.x + item.radius > player.x &&
-                item.x - item.radius < player.x + player.width &&
-                item.y + item.radius > player.y &&
-                item.y - item.radius < player.y + player.height
-            ) {
-                if (item.isBad) {
-                    lives--;
-                    createParticles(item.x, item.y, '#ff0055');
-                    if (lives <= 0) endGame();
-                } else {
-                    score += 10;
-                    createParticles(item.x, item.y, '#00ffcc');
-                }
-                items.splice(i, 1);
-                updateUI();
-                continue;
-            }
-
-            // Si el ítem sale de la pantalla por abajo
-            if (item.y > canvas.height + 20) {
-                // Se eliminó la pérdida de vida por dejar caer las esferas buenas para hacerlo más accesible y casual
-                items.splice(i, 1);
-            }
-        }
-
-        // Actualizar partículas
-        for (let i = particles.length - 1; i >= 0; i--) {
-            let p = particles[i];
-            p.x += p.dx;
-            p.y += p.dy;
-            p.life--;
-            if (p.life <= 0) particles.splice(i, 1);
-        }
-    }
-
-    function draw() {
-        ctx.fillStyle = '#131520';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Jugador
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = player.color;
-        ctx.fillStyle = player.color;
-        ctx.fillRect(player.x, player.y, player.width, player.height);
-
-        // Ítems
-        for (let item of items) {
-            ctx.shadowBlur = 12;
-            ctx.shadowColor = item.color;
-            ctx.fillStyle = item.color;
-            ctx.beginPath();
-            ctx.arc(item.x, item.y, item.radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        // Partículas
-        ctx.shadowBlur = 5;
-        for (let p of particles) {
-            ctx.fillStyle = p.color;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        ctx.shadowBlur = 0;
-    }
-
-    function loop() {
-        update();
-        draw();
-        if (isPlaying) {
-            requestAnimationFrame(loop);
-        }
-    }
-
-    function startGame() {
-        resetGame();
-        startScreen.classList.add('hidden');
-        gameOverScreen.classList.add('hidden');
-        isPlaying = true;
-        
-        clearInterval(spawnerInterval);
-        spawnerInterval = setInterval(spawnItem, 850); // Intervalo más cómodo entre objetos
-
-        loop();
-    }
-
-    function endGame() {
-        isPlaying = false;
-        clearInterval(spawnerInterval);
-
-        let isNewHighScore = false;
-        if (score > highScore) {
-            highScore = score;
-            localStorage.setItem('neonDropHighScore', highScore);
-            isNewHighScore = true;
-        }
-
-        finalScoreText.innerText = `Puntuación final: ${score}`;
-        newRecordText.innerText = isNewHighScore ? '¡NUEVO RÉCORD PERSONAL! 🎉' : `Récord actual: ${highScore}`;
-        
-        gameOverScreen.classList.remove('hidden');
-    }
-
-    startBtn.addEventListener('click', startGame);
-    restartBtn.addEventListener('click', startGame);
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>

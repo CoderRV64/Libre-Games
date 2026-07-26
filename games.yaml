@@ -1,8 +1,8 @@
 - id: shoot-target
   titulo: Shoot Target
-  ruta: games/shoot-target/index.html
+  ruta: https://libre-games.netlify.app/games/shoot-target/index.html
 
 - id: neondrop
   titulo: Neón Drop
-  ruta: games/neondrop/index.html
+  ruta: https://libre-games.netlify.app/games/neondrop/index.html
   

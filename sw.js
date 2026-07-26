@@ -1,9 +1,10 @@
-const CACHE_NAME = 'libre-games-v4';
+const CACHE_NAME = 'libre-games-v6';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
-    './games.json',
-    './manifest.json'
+    './games.yaml',
+    './manifest.json',
+    'https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js'
 ];
 
 self.addEventListener('install', (e) => {
@@ -37,6 +38,10 @@ self.addEventListener('fetch', (e) => {
                 return cachedResponse;
             }
             return fetch(e.request).catch(() => {
+                // Si falla la red al intentar cargar la página principal o recursos críticos, devuelve el index guardado
+                if (e.request.mode === 'navigate') {
+                    return caches.match('./index.html');
+                }
                 return caches.match(e.request);
             });
         })

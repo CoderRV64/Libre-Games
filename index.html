@@ -6,7 +6,7 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#76FF03">
     
-    <!-- Favicons blindados para que funcionen siempre -->
+    <!-- Favicons blindados -->
     <link rel="icon" type="image/png" sizes="192x192" href="https://libre-games.netlify.app/images/icon-192.png">
     <link rel="apple-touch-icon" href="https://libre-games.netlify.app/images/icon-192.png">
     <link rel="shortcut icon" href="https://libre-games.netlify.app/images/icon-192.png">
@@ -19,44 +19,52 @@
         body { 
             margin: 0; background: var(--bg); color: white; 
             font-family: 'Segoe UI', system-ui, sans-serif; 
-            height: 100vh; height: 100dvh;
-            display: flex; flex-direction: column; overflow: hidden;
+            min-height: 100vh; min-height: 100dvh;
+            display: flex; flex-direction: column; 
         }
 
         header { 
-            padding: 6px 15px; display: flex; justify-content: space-between; 
-            align-items: center; border-bottom: 1px solid #1a1f29; flex-shrink: 0;
+            padding: 15px 25px; display: flex; justify-content: space-between; 
+            align-items: center; border-bottom: 1px solid #1a1f29; 
+            background: var(--bg); position: sticky; top: 0; z-index: 10;
         }
-        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 2px; border-left: 4px solid var(--accent); padding-left: 8px; font-size: 0.95rem; }
+        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 2px; border-left: 4px solid var(--accent); padding-left: 10px; font-size: 1.2rem; }
 
         #btn-instalar { 
-            display: none; background: var(--accent); border: none; padding: 4px 8px; 
-            border-radius: 6px; font-weight: bold; cursor: pointer; color: #0b0e14; text-transform: uppercase; font-size: 0.65rem;
+            display: none; background: var(--accent); border: none; padding: 6px 12px; 
+            border-radius: 6px; font-weight: bold; cursor: pointer; color: #0b0e14; text-transform: uppercase; font-size: 0.75rem;
         }
         #btn-instalar:hover { background: #16a34a; color: white; }
 
-        .slider-container { 
-            flex-grow: 1; display: flex; align-items: center; 
-            overflow-x: auto; overflow-y: hidden; padding: 10px; gap: 15px;
-            scroll-snap-type: x mandatory; scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
+        /* Contenedor en Cuadrícula (Grid) universal para cualquier pantalla o mando */
+        .catalog-container { 
+            flex-grow: 1; padding: 25px; 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+            gap: 20px;
+            max-width: 1400px; margin: 0 auto; width: 100%;
         }
 
         .game-card { 
-            flex: 0 0 auto;
-            width: 240px; height: 220px; background: var(--card);
+            background: var(--card);
             border-radius: 12px; display: flex; flex-direction: column;
             justify-content: space-between; padding: 20px;
-            scroll-snap-align: center; border: 2px solid transparent;
-            transition: all 0.3s ease;
+            min-height: 180px;
+            border: 2px solid transparent;
+            transition: all 0.2s ease-in-out;
         }
 
-        .game-card:hover { 
-            border-color: var(--accent); transform: scale(1.02);
-            box-shadow: 0 0 20px rgba(34, 197, 94, 0.15);
+        .game-card:hover, .game-card:focus { 
+            border-color: var(--accent); 
+            transform: translateY(-3px);
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
+            outline: none;
         }
 
-        .game-card h2 { margin: 0; font-size: 1.1rem; text-align: center; word-break: break-word; }
+        .game-card h2 { 
+            margin: 0 0 15px 0; font-size: 1.1rem; 
+            text-align: center; word-break: break-word; 
+        }
 
         .action-btn { 
             background: var(--accent); border: none; padding: 12px; 
@@ -67,33 +75,12 @@
 
         .action-btn:hover { background: #fff; }
 
-        /* MODO HORIZONTAL (Landscape): Tarjeta compacta donde TÍTULO y BOTÓN van lado a lado para que quepan perfectamente */
-        @media (max-height: 450px) and (orientation: landscape) {
-            body { overflow-y: auto; }
-            header { padding: 4px 10px; }
-            h1 { font-size: 0.8rem; }
-            .slider-container { padding: 8px; gap: 10px; align-items: center; }
-            
-            .game-card { 
-                width: 300px; height: 75px; /* Altura reducida para que entre holgado */
-                flex-direction: row; align-items: center; 
-                justify-content: space-between; padding: 8px 12px; gap: 10px;
-            }
-            .game-card h2 { 
-                font-size: 0.85rem; text-align: left; margin: 0; 
-                flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-            }
-            .action-btn { 
-                width: 100px; padding: 8px 4px; font-size: 0.7rem; 
-                flex-shrink: 0; margin: 0; 
-            }
-        }
-
-        /* Ajustes para móviles en modo VERTICAL (Portrait) */
-        @media (max-width: 600px) and (orientation: portrait) {
-            .slider-container { padding: 15px; gap: 15px; }
-            .game-card { width: 200px; height: 200px; padding: 15px; }
-            .game-card h2 { font-size: 1rem; }
+        /* Ajustes finos para móviles */
+        @media (max-width: 600px) {
+            .catalog-container { padding: 15px; gap: 15px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+            .game-card { padding: 15px; min-height: 150px; }
+            .game-card h2 { font-size: 0.95rem; }
+            .action-btn { padding: 10px; font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -104,7 +91,7 @@
         <button id="btn-instalar">Instalar Consola</button>
     </header>
 
-    <div class="slider-container" id="game-slider"></div>
+    <div class="catalog-container" id="game-slider"></div>
 
     <script>
         let deferredPrompt;
@@ -146,13 +133,14 @@
                 for (const juego of juegos) {
                     const card = document.createElement('div');
                     card.className = 'game-card';
+                    card.tabIndex = 0; // Permite navegación limpia por teclado o D-Pad de mando
                     
                     const cacheName = 'juego-' + juego.id;
                     const cacheExists = await caches.has(cacheName);
 
                     card.innerHTML = `
                         <h2>${juego.titulo}</h2>
-                        <button class="action-btn" onclick="gestionarJuego('${juego.id}', '${juego.ruta}', this)">
+                        <button class="action-btn" onclick="gestionarJuego('${juego.id}', '${juego.ruta}', event)">
                             ${cacheExists ? 'JUGAR' : 'DESCARGAR'}
                         </button>
                     `;
@@ -163,7 +151,9 @@
             }
         }
 
-        async function gestionarJuego(id, ruta, btn) {
+        async function gestionarJuego(id, ruta, event) {
+            event.stopPropagation();
+            const btn = event.target;
             const cacheName = 'juego-' + id;
             if (btn.innerText === 'DESCARGAR') {
                 try {

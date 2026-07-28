@@ -1,4 +1,4 @@
-const CACHE_NAME = 'libre-games-v6';
+const CACHE_NAME = 'libre-games-v7';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

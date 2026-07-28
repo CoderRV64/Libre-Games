@@ -3,18 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#7EBE37">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e40af">
     
-    <!-- Favicons blindados -->
-    <link rel="icon" type="image/png" sizes="192x192" href="https://libre-games.netlify.app/images/icon-192.png">
-    <link rel="apple-touch-icon" href="https://libre-games.netlify.app/images/icon-192.png">
-    <link rel="shortcut icon" href="https://libre-games.netlify.app/images/icon-192.png">
+    <!-- Favicons blindados para PC, Android e iOS -->
+    <link rel="icon" type="image/png" sizes="32x32" href="images/icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
+    <link rel="apple-touch-icon" href="images/icon-192.png">
+    <link rel="shortcut icon" href="images/icon-192.png">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <title>Libre Games</title>
     <style>
-        :root { --bg: #0b0e14; --card: #1a1f29; --accent: #22c55e; }
+        /* Paleta de colores: Negro Profundo y Azul Eléctrico */
+        :root { 
+            --bg: #090d16; 
+            --card: #151f32; 
+            --accent: #3b82f6; 
+            --accent-hover: #1d4ed8;
+        }
         * { box-sizing: border-box; }
         body { 
             margin: 0; background: var(--bg); color: white; 
@@ -25,18 +32,19 @@
 
         header { 
             padding: 15px 25px; display: flex; justify-content: space-between; 
-            align-items: center; border-bottom: 1px solid #1a1f29; 
+            align-items: center; border-bottom: 1px solid var(--card); 
             background: var(--bg); position: sticky; top: 0; z-index: 10;
         }
         h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 2px; border-left: 4px solid var(--accent); padding-left: 10px; font-size: 1.2rem; }
 
         #btn-instalar { 
             display: none; background: var(--accent); border: none; padding: 6px 12px; 
-            border-radius: 6px; font-weight: bold; cursor: pointer; color: #0b0e14; text-transform: uppercase; font-size: 0.75rem;
+            border-radius: 6px; font-weight: bold; cursor: pointer; color: white; text-transform: uppercase; font-size: 0.75rem;
+            transition: background 0.2s;
         }
-        #btn-instalar:hover { background: #16a34a; color: white; }
+        #btn-instalar:hover { background: var(--accent-hover); }
 
-        /* Contenedor en Cuadrícula (Grid) universal para cualquier pantalla o mando */
+        /* Contenedor en Cuadrícula (Grid) universal */
         .catalog-container { 
             flex-grow: 1; padding: 25px; 
             display: grid; 
@@ -57,7 +65,7 @@
         .game-card:hover, .game-card:focus { 
             border-color: var(--accent); 
             transform: translateY(-3px);
-            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.25);
             outline: none;
         }
 
@@ -69,11 +77,11 @@
         .action-btn { 
             background: var(--accent); border: none; padding: 12px; 
             border-radius: 6px; font-weight: bold; cursor: pointer;
-            text-transform: uppercase; color: var(--bg); transition: background 0.2s;
+            text-transform: uppercase; color: white; transition: background 0.2s, color 0.2s;
             width: 100%; font-size: 0.85rem;
         }
 
-        .action-btn:hover { background: #fff; }
+        .action-btn:hover { background: white; color: var(--bg); }
 
         /* Ajustes finos para móviles */
         @media (max-width: 600px) {
@@ -114,7 +122,7 @@
             try {
                 let textoYaml = "";
                 try {
-                    const respuesta = await fetch('https://libre-games.netlify.app/games.yaml?v=' + new Date().getTime());
+                    const respuesta = await fetch('games.yaml?v=' + new Date().getTime());
                     if (!respuesta.ok) throw new Error("Red no disponible");
                     textoYaml = await respuesta.text();
                 } catch (netError) {
@@ -133,7 +141,7 @@
                 for (const juego of juegos) {
                     const card = document.createElement('div');
                     card.className = 'game-card';
-                    card.tabIndex = 0; // Permite navegación limpia por teclado o D-Pad de mando
+                    card.tabIndex = 0; 
                     
                     const cacheName = 'juego-' + juego.id;
                     const cacheExists = await caches.has(cacheName);
@@ -176,7 +184,8 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
+          // Ruta relativa fija sin la barra diagonal inicial
+          navigator.serviceWorker.register('sw.js')
             .then((registration) => {
               console.log('Service Worker registrado correctamente con alcance:', registration.scope);
             })

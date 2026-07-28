@@ -15,51 +15,55 @@
         }
 
         header { 
-            padding: 30px 40px; display: flex; justify-content: space-between; 
+            padding: 15px 30px; display: flex; justify-content: space-between; 
             align-items: center; border-bottom: 1px solid #1a1f29; 
         }
-        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 4px; border-left: 5px solid var(--accent); padding-left: 15px; font-size: 1.8rem; }
+        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 3px; border-left: 4px solid var(--accent); padding-left: 12px; font-size: 1.4rem; }
 
         #btn-instalar { 
-            display: none; background: var(--accent); border: none; padding: 10px 20px; 
-            border-radius: 6px; font-weight: bold; cursor: pointer; color: #0b0e14; text-transform: uppercase;
+            display: none; background: var(--accent); border: none; padding: 8px 16px; 
+            border-radius: 6px; font-weight: bold; cursor: pointer; color: #0b0e14; text-transform: uppercase; font-size: 0.85rem;
         }
         #btn-instalar:hover { background: #16a34a; color: white; }
 
         .slider-container { 
             flex-grow: 1; display: flex; align-items: center; 
-            overflow-x: auto; padding: 0 50px; gap: 30px;
+            overflow-x: auto; padding: 0 30px; gap: 20px;
             scroll-snap-type: x mandatory; scroll-behavior: smooth;
         }
 
         .game-card { 
-            min-width: 260px; height: 320px; background: var(--card);
+            min-width: 220px; height: 260px; background: var(--card);
             border-radius: 12px; display: flex; flex-direction: column;
-            justify-content: space-between; padding: 30px;
+            justify-content: space-between; padding: 20px;
             scroll-snap-align: center; border: 2px solid transparent;
             transition: all 0.3s ease;
         }
 
         .game-card:hover { 
-            border-color: var(--accent); transform: scale(1.03);
-            box-shadow: 0 0 25px rgba(34, 197, 94, 0.15);
+            border-color: var(--accent); transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.15);
         }
 
-        .game-card h2 { margin: 0; font-size: 1.4rem; text-align: center; margin-top: 40px; }
+        .game-card h2 { margin: 0; font-size: 1.2rem; text-align: center; margin-top: 20px; }
 
         .action-btn { 
-            background: var(--accent); border: none; padding: 14px; 
+            background: var(--accent); border: none; padding: 12px; 
             border-radius: 6px; font-weight: bold; cursor: pointer;
             text-transform: uppercase; color: var(--bg); transition: background 0.2s;
-            width: 100%;
+            width: 100%; font-size: 0.9rem;
         }
 
         .action-btn:hover { background: #fff; }
 
+        /* Media Queries para adaptar a pantallas muy pequeñas de móviles */
         @media (max-width: 600px) {
-            header { padding: 20px; flex-direction: column; gap: 15px; align-items: flex-start; }
-            .slider-container { padding: 0 20px; gap: 20px; }
-            .game-card { min-width: 220px; height: 280px; padding: 20px; }
+            header { padding: 10px 15px; }
+            h1 { font-size: 1.1rem; letter-spacing: 2px; }
+            .slider-container { padding: 0 15px; gap: 15px; }
+            .game-card { min-width: 180px; height: 220px; padding: 15px; }
+            .game-card h2 { font-size: 1rem; }
+            .action-btn { padding: 10px; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -97,12 +101,10 @@
             try {
                 let textoYaml = "";
                 try {
-                    // Intenta descargar la versión más fresca desde la red
-                    const respuesta = await fetch('games.yaml?v=' + new Date().getTime());
+                    const respuesta = await fetch('https://libre-games.netlify.app/games.yaml?v=' + new Date().getTime());
                     if (!respuesta.ok) throw new Error("Red no disponible");
                     textoYaml = await respuesta.text();
                 } catch (netError) {
-                    // Si no hay red, busca el YAML directamente en la caché del navegador para no dejar la pantalla vacía
                     const cacheMatch = await caches.match('games.yaml');
                     if (cacheMatch) {
                         textoYaml = await cacheMatch.text();
@@ -111,7 +113,6 @@
                     }
                 }
 
-                // Convierte el texto YAML a un objeto de JavaScript usando la librería cargada
                 const juegos = jsyaml.load(textoYaml);
                 const slider = document.getElementById('game-slider');
                 slider.innerHTML = '';

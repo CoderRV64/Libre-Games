@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#76FF03">
+    <!-- Favicon clásico para la pestaña del navegador -->
+    <link rel="icon" type="image/png" href="/images/icon-192.png">
+
+    <!-- Icono específico para dispositivos Apple (iOS) -->
+    <link rel="apple-touch-icon" href="/images/icon-192.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <title>Libre Games</title>
     <style>
@@ -78,10 +83,7 @@
     <div class="slider-container" id="game-slider"></div>
 
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
-
+        
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -173,3 +175,4 @@
     </script>
 </body>
 </html>
+

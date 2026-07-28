@@ -1,18 +1,22 @@
 {
-  "name": "Libre Games",
-  "short_name": "LibreGames",
-  "start_url": "./index.html",
-  "scope": "./",
-  "display": "fullscreen",
-  "orientation": "landscape",
-  "background_color": "#0b0e14",
-  "theme_color": "#22c55e",
+  "name": "LibreGames",
+  "short_name": "Libre Games",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7EBE37",
+  "description": "La página web oficial de juegos llamada LibreGames",
   "icons": [
-    {
-      "src": "https://via.placeholder.com/512",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ]
-}
+  {
+    "src": "/images/icon-192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  },
+  {
+    "src": "/images/icon-512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }
+]
+
+  

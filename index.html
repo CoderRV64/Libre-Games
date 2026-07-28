@@ -23,20 +23,20 @@
         }
 
         header { 
-            padding: 10px 20px; display: flex; justify-content: space-between; 
+            padding: 8px 15px; display: flex; justify-content: space-between; 
             align-items: center; border-bottom: 1px solid #1a1f29; flex-shrink: 0;
         }
-        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 2px; border-left: 4px solid var(--accent); padding-left: 10px; font-size: 1.1rem; }
+        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 2px; border-left: 4px solid var(--accent); padding-left: 8px; font-size: 1rem; }
 
         #btn-instalar { 
-            display: none; background: var(--accent); border: none; padding: 6px 12px; 
-            border-radius: 6px; font-weight: bold; cursor: pointer; color: #0b0e14; text-transform: uppercase; font-size: 0.75rem;
+            display: none; background: var(--accent); border: none; padding: 5px 10px; 
+            border-radius: 6px; font-weight: bold; cursor: pointer; color: #0b0e14; text-transform: uppercase; font-size: 0.7rem;
         }
         #btn-instalar:hover { background: #16a34a; color: white; }
 
         .slider-container { 
             flex-grow: 1; display: flex; align-items: center; 
-            overflow-x: auto; overflow-y: hidden; padding: 20px; gap: 20px;
+            overflow-x: auto; overflow-y: hidden; padding: 15px; gap: 15px;
             scroll-snap-type: x mandatory; scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
         }
@@ -66,22 +66,23 @@
 
         .action-btn:hover { background: #fff; }
 
-        /* Adaptación automática para móviles en modo HORIZONTAL (Landscape) */
-        @media (max-height: 500px) and (orientation: landscape) {
+        /* Corrección adaptativa agresiva para cuando las barras del navegador restan altura (Landscape < 420px) */
+        @media (max-height: 420px) and (orientation: landscape) {
             body { overflow-y: auto; }
-            header { padding: 6px 15px; }
-            h1 { font-size: 0.95rem; }
+            header { padding: 4px 12px; }
+            h1 { font-size: 0.85rem; letter-spacing: 1px; border-left-width: 3px; }
+            #btn-instalar { padding: 4px 8px; font-size: 0.65rem; }
             .slider-container { 
-                padding: 10px 15px; gap: 12px; 
-                align-items: stretch;
+                padding: 10px; gap: 10px; 
+                align-items: center;
             }
             .game-card { 
-                width: 280px; height: 100px; 
+                width: 240px; height: 85px; 
                 flex-direction: row; align-items: center; 
-                justify-content: space-between; padding: 12px 15px;
+                justify-content: space-between; padding: 10px 12px;
             }
-            .game-card h2 { font-size: 0.95rem; text-align: left; margin: 0; flex-grow: 1; padding-right: 10px; }
-            .action-btn { width: 110px; padding: 8px; font-size: 0.75rem; flex-shrink: 0; }
+            .game-card h2 { font-size: 0.85rem; text-align: left; margin: 0; flex-grow: 1; padding-right: 8px; }
+            .action-btn { width: 95px; padding: 6px; font-size: 0.7rem; flex-shrink: 0; }
         }
 
         /* Ajustes para móviles en modo VERTICAL (Portrait) */

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#76FF03">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <title>Libre Games</title>
     <style>
@@ -156,6 +157,19 @@
         }
 
         cargarTienda();
+    </script>
+<script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('Service Worker registrado correctamente con alcance:', registration.scope);
+            })
+            .catch((error) => {
+              console.log('Error al registrar el Service Worker:', error);
+            });
+        });
+      }
     </script>
 </body>
 </html>

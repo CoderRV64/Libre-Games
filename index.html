@@ -14,32 +14,36 @@
     <title>Libre Games</title>
     <style>
         :root { --bg: #0b0e14; --card: #1a1f29; --accent: #22c55e; }
+        * { box-sizing: border-box; }
         body { 
             margin: 0; background: var(--bg); color: white; 
-            font-family: 'Segoe UI', system-ui, sans-serif; height: 100vh;
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            height: 100vh; height: 100dvh;
             display: flex; flex-direction: column; overflow: hidden;
         }
 
         header { 
-            padding: 15px 30px; display: flex; justify-content: space-between; 
-            align-items: center; border-bottom: 1px solid #1a1f29; 
+            padding: 12px 20px; display: flex; justify-content: space-between; 
+            align-items: center; border-bottom: 1px solid #1a1f29; flex-shrink: 0;
         }
-        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 3px; border-left: 4px solid var(--accent); padding-left: 12px; font-size: 1.4rem; }
+        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 2px; border-left: 4px solid var(--accent); padding-left: 10px; font-size: 1.2rem; }
 
         #btn-instalar { 
-            display: none; background: var(--accent); border: none; padding: 8px 16px; 
-            border-radius: 6px; font-weight: bold; cursor: pointer; color: #0b0e14; text-transform: uppercase; font-size: 0.85rem;
+            display: none; background: var(--accent); border: none; padding: 6px 12px; 
+            border-radius: 6px; font-weight: bold; cursor: pointer; color: #0b0e14; text-transform: uppercase; font-size: 0.75rem;
         }
         #btn-instalar:hover { background: #16a34a; color: white; }
 
         .slider-container { 
             flex-grow: 1; display: flex; align-items: center; 
-            overflow-x: auto; padding: 0 30px; gap: 20px;
+            overflow-x: auto; overflow-y: hidden; padding: 20px; gap: 20px;
             scroll-snap-type: x mandatory; scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
         }
 
         .game-card { 
-            min-width: 220px; height: 260px; background: var(--card);
+            flex: 0 0 auto;
+            width: 240px; height: 220px; background: var(--card);
             border-radius: 12px; display: flex; flex-direction: column;
             justify-content: space-between; padding: 20px;
             scroll-snap-align: center; border: 2px solid transparent;
@@ -51,25 +55,24 @@
             box-shadow: 0 0 20px rgba(34, 197, 94, 0.15);
         }
 
-        .game-card h2 { margin: 0; font-size: 1.2rem; text-align: center; margin-top: 20px; }
+        .game-card h2 { margin: 0; font-size: 1.1rem; text-align: center; word-break: break-word; }
 
         .action-btn { 
             background: var(--accent); border: none; padding: 12px; 
             border-radius: 6px; font-weight: bold; cursor: pointer;
             text-transform: uppercase; color: var(--bg); transition: background 0.2s;
-            width: 100%; font-size: 0.9rem;
+            width: 100%; font-size: 0.85rem;
         }
 
         .action-btn:hover { background: #fff; }
 
-        /* Media Queries para adaptar a pantallas muy pequeñas de móviles */
+        /* Media Queries para adaptar a pantallas móviles */
         @media (max-width: 600px) {
             header { padding: 10px 15px; }
             h1 { font-size: 1.1rem; letter-spacing: 2px; }
-            .slider-container { padding: 0 15px; gap: 15px; }
-            .game-card { min-width: 180px; height: 220px; padding: 15px; }
+            .slider-container { padding: 15px; gap: 15px; }
+            .game-card { width: 200px; height: 200px; padding: 15px; }
             .game-card h2 { font-size: 1rem; }
-            .action-btn { padding: 10px; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -83,7 +86,6 @@
     <div class="slider-container" id="game-slider"></div>
 
     <script>
-        
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -160,7 +162,7 @@
 
         cargarTienda();
     </script>
-<script>
+    <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/sw.js')
@@ -175,4 +177,3 @@
     </script>
 </body>
 </html>
-

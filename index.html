@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#76FF03">
-    <!-- Favicon clásico para la pestaña del navegador -->
-    <link rel="icon" type="image/png" href="/images/icon-192.png">
+    <!-- Favicon absoluto seguro -->
+    <link rel="icon" type="image/png" href="https://libre-games.netlify.app/images/icon-192.png">
 
     <!-- Icono específico para dispositivos Apple (iOS) -->
-    <link rel="apple-touch-icon" href="/images/icon-192.png">
+    <link rel="apple-touch-icon" href="https://libre-games.netlify.app/images/icon-192.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <title>Libre Games</title>
     <style>
@@ -23,10 +23,10 @@
         }
 
         header { 
-            padding: 12px 20px; display: flex; justify-content: space-between; 
+            padding: 10px 20px; display: flex; justify-content: space-between; 
             align-items: center; border-bottom: 1px solid #1a1f29; flex-shrink: 0;
         }
-        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 2px; border-left: 4px solid var(--accent); padding-left: 10px; font-size: 1.2rem; }
+        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 2px; border-left: 4px solid var(--accent); padding-left: 10px; font-size: 1.1rem; }
 
         #btn-instalar { 
             display: none; background: var(--accent); border: none; padding: 6px 12px; 
@@ -66,10 +66,26 @@
 
         .action-btn:hover { background: #fff; }
 
-        /* Media Queries para adaptar a pantallas móviles */
-        @media (max-width: 600px) {
-            header { padding: 10px 15px; }
-            h1 { font-size: 1.1rem; letter-spacing: 2px; }
+        /* Adaptación automática para móviles en modo HORIZONTAL (Landscape) */
+        @media (max-height: 500px) and (orientation: landscape) {
+            body { overflow-y: auto; }
+            header { padding: 6px 15px; }
+            h1 { font-size: 0.95rem; }
+            .slider-container { 
+                padding: 10px 15px; gap: 12px; 
+                align-items: stretch;
+            }
+            .game-card { 
+                width: 280px; height: 100px; 
+                flex-direction: row; align-items: center; 
+                justify-content: space-between; padding: 12px 15px;
+            }
+            .game-card h2 { font-size: 0.95rem; text-align: left; margin: 0; flex-grow: 1; padding-right: 10px; }
+            .action-btn { width: 110px; padding: 8px; font-size: 0.75rem; flex-shrink: 0; }
+        }
+
+        /* Ajustes para móviles en modo VERTICAL (Portrait) */
+        @media (max-width: 600px) and (orientation: portrait) {
             .slider-container { padding: 15px; gap: 15px; }
             .game-card { width: 200px; height: 200px; padding: 15px; }
             .game-card h2 { font-size: 1rem; }

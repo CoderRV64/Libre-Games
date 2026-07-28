@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#76FF03">
-    <!-- Favicon absoluto seguro -->
-    <link rel="icon" type="image/png" href="https://libre-games.netlify.app/images/icon-192.png">
-
-    <!-- Icono específico para dispositivos Apple (iOS) -->
+    
+    <!-- Favicons blindados para que funcionen siempre -->
+    <link rel="icon" type="image/png" sizes="192x192" href="https://libre-games.netlify.app/images/icon-192.png">
     <link rel="apple-touch-icon" href="https://libre-games.netlify.app/images/icon-192.png">
+    <link rel="shortcut icon" href="https://libre-games.netlify.app/images/icon-192.png">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <title>Libre Games</title>
     <style>
@@ -23,20 +24,20 @@
         }
 
         header { 
-            padding: 8px 15px; display: flex; justify-content: space-between; 
+            padding: 6px 15px; display: flex; justify-content: space-between; 
             align-items: center; border-bottom: 1px solid #1a1f29; flex-shrink: 0;
         }
-        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 2px; border-left: 4px solid var(--accent); padding-left: 8px; font-size: 1rem; }
+        h1 { margin: 0; color: white; text-transform: uppercase; letter-spacing: 2px; border-left: 4px solid var(--accent); padding-left: 8px; font-size: 0.95rem; }
 
         #btn-instalar { 
-            display: none; background: var(--accent); border: none; padding: 5px 10px; 
-            border-radius: 6px; font-weight: bold; cursor: pointer; color: #0b0e14; text-transform: uppercase; font-size: 0.7rem;
+            display: none; background: var(--accent); border: none; padding: 4px 8px; 
+            border-radius: 6px; font-weight: bold; cursor: pointer; color: #0b0e14; text-transform: uppercase; font-size: 0.65rem;
         }
         #btn-instalar:hover { background: #16a34a; color: white; }
 
         .slider-container { 
             flex-grow: 1; display: flex; align-items: center; 
-            overflow-x: auto; overflow-y: hidden; padding: 15px; gap: 15px;
+            overflow-x: auto; overflow-y: hidden; padding: 10px; gap: 15px;
             scroll-snap-type: x mandatory; scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
         }
@@ -66,23 +67,26 @@
 
         .action-btn:hover { background: #fff; }
 
-        /* Corrección adaptativa agresiva para cuando las barras del navegador restan altura (Landscape < 420px) */
-        @media (max-height: 420px) and (orientation: landscape) {
+        /* MODO HORIZONTAL (Landscape): Tarjeta compacta donde TÍTULO y BOTÓN van lado a lado para que quepan perfectamente */
+        @media (max-height: 450px) and (orientation: landscape) {
             body { overflow-y: auto; }
-            header { padding: 4px 12px; }
-            h1 { font-size: 0.85rem; letter-spacing: 1px; border-left-width: 3px; }
-            #btn-instalar { padding: 4px 8px; font-size: 0.65rem; }
-            .slider-container { 
-                padding: 10px; gap: 10px; 
-                align-items: center;
-            }
+            header { padding: 4px 10px; }
+            h1 { font-size: 0.8rem; }
+            .slider-container { padding: 8px; gap: 10px; align-items: center; }
+            
             .game-card { 
-                width: 240px; height: 85px; 
+                width: 300px; height: 75px; /* Altura reducida para que entre holgado */
                 flex-direction: row; align-items: center; 
-                justify-content: space-between; padding: 10px 12px;
+                justify-content: space-between; padding: 8px 12px; gap: 10px;
             }
-            .game-card h2 { font-size: 0.85rem; text-align: left; margin: 0; flex-grow: 1; padding-right: 8px; }
-            .action-btn { width: 95px; padding: 6px; font-size: 0.7rem; flex-shrink: 0; }
+            .game-card h2 { 
+                font-size: 0.85rem; text-align: left; margin: 0; 
+                flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            }
+            .action-btn { 
+                width: 100px; padding: 8px 4px; font-size: 0.7rem; 
+                flex-shrink: 0; margin: 0; 
+            }
         }
 
         /* Ajustes para móviles en modo VERTICAL (Portrait) */

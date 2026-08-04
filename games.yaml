@@ -1,6 +1,6 @@
-- id: shoot-target
-  titulo: Shoot Target
-  ruta: https://libre-games.netlify.app/games/shoot-target/index.html
+- id: astro-escape
+  titulo: Astro escape:lluvia de meteoritos
+  ruta: https://libre-games.netlify.app/games/astro-escape/index.html
 
 - id: neondrop
   titulo: Neón Drop

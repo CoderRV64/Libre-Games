@@ -1,11 +1,12 @@
 - id: astro-escape
   titulo: Astro escape:lluvia de meteoritos
-  ruta: https://libre-games.netlify.app/games/astro-escape/index.html
+  ruta: https://coderrv64.github.io/Libre-Games/games/astro-escape/index.html
 
 - id: neondrop
   titulo: Neón Drop
-  ruta: https://libre-games.netlify.app/games/neondrop/index.html
+  ruta: https://coderrv64.github.io/Libre-Games/games/neondrop/index.html
   
 - id: penaltyround26
   titulo: penalty round 26 
-  ruta: https://libre-games.netlify.app/games/penaltyround26/index.html
+  ruta: https://coderrv64.github.io/Libre-Games/games/penaltyround26/index.html
+  

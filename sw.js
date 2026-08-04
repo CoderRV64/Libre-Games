@@ -1,4 +1,4 @@
-const CACHE_NAME = 'libre-games-v8';
+const CACHE_NAME = 'libre-games-v9';
 // Archivos esenciales de la interfaz que deben estar disponibles offline siempre
 const ASSETS_TO_CACHE = [
   './',
